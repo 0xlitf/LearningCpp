@@ -4,6 +4,7 @@
 #include <tuple>
 #include <string>
 #include <stdexcept>
+#include <set>
 
 std::tuple<int, int> foo_tuple()
 {
