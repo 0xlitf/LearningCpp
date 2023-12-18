@@ -1,6 +1,8 @@
 #include <QCoreApplication>
 #include <iostream>
 #include <memory>
+#include <iomanip>
+#include <QDebug>
 
 #define print(var)                                                          \
     std::cout << std::setw(6) << #var << ": " << var << std::endl;          \
@@ -56,6 +58,24 @@ std::unique_ptr<T> make_unique_implement(Ts &&...params)
 int main(int argc, char *argv[])
 {
     QCoreApplication a(argc, argv);
+
+    if (!qEnvironmentVariableIsEmpty("VSAPPIDDIR")) { // start direct in vs
+        qSetMessagePattern("%{file}(%{line}): "
+                           "[%{type}]:"
+                           " [%{function}]:\n"
+                           " [%{time yyyy-MM-dd h:mm:ss.zzz t}]"
+                           " %{message}");
+        qDebug() << "start in vs: " << qgetenv("VSAPPIDDIR");
+    } else if (!qEnvironmentVariableIsEmpty("QTDIR")) { // start direct in QtCreator
+        qSetMessagePattern("\033[1;37m [file://%{file}:%{line}]:\033[0m"
+                           " %{if-debug}\033[1;36m%{endif}%{if-info}\033[1;44m%{endif}%{if-warning}\033[1;43m%{endif}%{if-critical}\033[1;41m%{endif}%{if-fatal}\033[1;41m%{endif}[%{type}]:\033[0m"
+                           "\033[1;35m [%{function}]:\033[0m\n"
+                           "\033[0;37m [%{time yyyy-MM-dd h:mm:ss.zzz t}]\033[0m"
+                           "\033[1;91m %{message}\033[0m");
+        qDebug() << "start in QtCreator: " << qgetenv("QTDIR");
+    } else {
+        // qInstallMessageHandler(logger);
+    }
 
     {
         // init style
@@ -315,6 +335,45 @@ int main(int argc, char *argv[])
         int *ptr_error = DanglingPointer::sharedPtr().get();
         qDebug() << "*ptr_error: " << *ptr_error << ptr_error;
     }
+
+    struct NestedSharedPointerA {
+        NestedSharedPointerA(){
+            qDebug() << "A cons";
+        }
+        ~NestedSharedPointerA(){
+            qDebug() << "A dis";
+        }
+
+        int a = 0;
+        struct NestedSharedPointerB {
+            NestedSharedPointerB(){
+                qDebug() << "B cons";
+            }
+            ~NestedSharedPointerB(){
+                qDebug() << "B dis";
+            }
+
+            int c = 3;
+        };
+        QSharedPointer<NestedSharedPointerB> b = QSharedPointer<NestedSharedPointerB>(new NestedSharedPointerB);
+    };
+    QSharedPointer<NestedSharedPointerA> m_a = QSharedPointer<NestedSharedPointerA>(new NestedSharedPointerA);
+    qDebug() << "m_a a b" << m_a << m_a->a << m_a->b;
+
+    auto out_b = m_a->b;
+    auto out_b2 = m_a->b;
+    qDebug() << "b out_b" << m_a->b << out_b;
+
+    m_a.clear();
+    qDebug() << "m_a" << m_a;
+    qDebug() << "out_b" << out_b << out_b->c;
+
+    out_b.clear();
+    qDebug() << "after out_b.clear(), out_b" << out_b;
+
+    auto m_oa = new NestedSharedPointerA;
+
+    delete m_oa;
 
     return a.exec();
 }
