@@ -1,0 +1,8 @@
+[requires]
+tinyxml2/9.0.0
+pugixml/1.14
+
+[generators]
+CMakeDeps
+CMakeToolchain
+
