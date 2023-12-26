@@ -1,0 +1,7 @@
+[requires]
+simdjson/3.3.0
+
+[generators]
+CMakeDeps
+CMakeToolchain
+

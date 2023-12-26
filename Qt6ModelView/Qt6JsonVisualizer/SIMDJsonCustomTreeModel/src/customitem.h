@@ -1,0 +1,77 @@
+#pragma once
+#include <QVariant>
+#include <QJsonValue>
+#include "simdjson.h"
+
+class CustomItem {
+public:
+    CustomItem(CustomItem* parent = nullptr)
+        : m_parentItem(parent) {}
+
+    CustomItem* child(int i) {
+        CustomItem* m_childItem = m_childrenItems.value(i);
+        if (m_childItem) {
+            return m_childItem;
+        }
+        return nullptr;
+    }
+    ~CustomItem() {
+        QHash<int, CustomItem*>::iterator it;
+        for (it = m_childrenItems.begin(); it != m_childrenItems.end(); ++it) {
+            delete it.value();
+        }
+        m_childrenItems.clear();
+    }
+
+    int childrenCount() { return m_childrenItems.count(); }
+    bool hasChildren() { return m_childrenItems.count() > 0; }
+    void addChild(CustomItem* child) {
+        child->setParent(this);
+        int i = m_childrenItems.count();
+        m_childrenItems[i] = child;
+    }
+
+    void addAttribute(QList<QVariant> l) {
+        m_attribute = l;
+    }
+    QList<QVariant> attribute() const { return m_attribute; }
+
+    QVariant value(int column) {
+        return m_attribute[column];
+    }
+
+    void setValue(int column, QVariant value) {
+        m_attribute[column] = value;
+    }
+
+    QString elementName() const { return m_elementName; }
+    void setElementName(const QString& newElementName) { m_elementName = newElementName; }
+
+    void setParent(CustomItem* parent) { m_parentItem = parent; }
+    CustomItem* parent() { return m_parentItem; }
+
+    bool checked() const { return m_checked; }
+    void setChecked(bool newChecked) { m_checked = newChecked; }
+
+    simdjson::ondemand::json_type itemType() const;
+    void setType(const simdjson::ondemand::json_type& type);
+
+    QHash<int, CustomItem*> childrenItems() const;
+    void setChildrenItems(const QHash<int, CustomItem*>& newChildrenItems);
+
+    simdjson::fallback::number_type numberType() const;
+    void setNumberType(simdjson::fallback::number_type newNumberType);
+
+private:
+    QList<QVariant> m_attribute{QVariant(), QVariant(), QVariant()};
+
+    QHash<int, CustomItem*> m_childrenItems{};
+    CustomItem* m_parentItem = nullptr;
+
+    simdjson::fallback::number_type m_numberType;
+
+    bool m_checked = false;
+    QString m_elementName{};
+
+    simdjson::ondemand::json_type m_itemType;
+};
