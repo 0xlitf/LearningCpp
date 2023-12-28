@@ -9,7 +9,7 @@ message("CMake start \n\t directory name: ${current_dir}")
 
 set(CMAKE_VERBOSE_MAKEFILE ON)
 
-project("${current_dir}" VERSION 0.1 LANGUAGES CXX)
+project("${current_dir}" VERSION 0.1 LANGUAGES C CXX)
 string(TOUPPER ${PROJECT_NAME} PROJECT_NAME_UPPER)
 
 set(CMAKE_AUTOUIC ON)

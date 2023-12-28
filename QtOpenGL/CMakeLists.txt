@@ -10,7 +10,7 @@ set(CMAKE_VERBOSE_MAKEFILE ON)
 add_subdirectory("C:/PCL 1.13.1/3rdParty" 3rdParty.out)
 add_subdirectory(${QtWrapper_DIR} QtWrapper.out)
 
-project("${current_dir}" VERSION 0.1 LANGUAGES CXX)
+project("${current_dir}" VERSION 0.1 LANGUAGES C CXX)
 string(TOUPPER ${PROJECT_NAME} PROJECT_NAME_UPPER)
 
 if(CMAKE_BUILD_TYPE MATCHES "Release")
