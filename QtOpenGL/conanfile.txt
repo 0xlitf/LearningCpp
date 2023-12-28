@@ -1,0 +1,9 @@
+[requires]
+simdjson/3.3.0
+tinyxml2/9.0.0
+pugixml/1.14
+
+[generators]
+CMakeDeps
+CMakeToolchain
+
