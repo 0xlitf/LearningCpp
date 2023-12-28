@@ -1,5 +1,5 @@
 [requires]
-simdjson/3.3.0
+simdjson/3.6.1
 tinyxml2/9.0.0
 pugixml/1.14
 

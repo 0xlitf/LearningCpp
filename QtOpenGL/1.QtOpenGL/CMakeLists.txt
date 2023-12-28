@@ -8,11 +8,6 @@ string(REPLACE "-" "_" current_dir "${current_dir}")
 message("CMake start \n\t directory name: ${current_dir}")
 
 set(CMAKE_VERBOSE_MAKEFILE ON)
-#set(fmt_DIR "C:/PCL 1.13.1/3rdParty/fmt-10.1.1-lib")
-
-add_subdirectory("C:/PCL 1.13.1/3rdParty" 3rdParty.out)
-
-#set(current_dir "${current_dir}_${CMAKE_BUILD_TYPE}")
 
 project("${current_dir}" VERSION 0.1 LANGUAGES CXX)
 string(TOUPPER ${PROJECT_NAME} PROJECT_NAME_UPPER)
@@ -32,14 +27,10 @@ file(GLOB ${PROJECT_NAME_UPPER}_HEADERS "${CMAKE_CURRENT_SOURCE_DIR}/*.h")
 file(GLOB ${PROJECT_NAME_UPPER}_SOURCES "${CMAKE_CURRENT_SOURCE_DIR}/*.cpp")
 
 find_package(OpenCV REQUIRED)
-#find_package(fmt)
-
-add_subdirectory(${QtWrapper_DIR} QtWrapper.out)
 
 qt_add_executable(${PROJECT_NAME}
     ${${PROJECT_NAME_UPPER}_SOURCES}
     ${${PROJECT_NAME_UPPER}_HEADERS}
-    qtopengl.h qtopengl.cpp
 )
 
 set_target_properties(${PROJECT_NAME} PROPERTIES
