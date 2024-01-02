@@ -19,7 +19,7 @@ set(CMAKE_AUTORCC ON)
 set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-find_package(Qt6 6.5 REQUIRED COMPONENTS Core Quick Widgets Svg)
+find_package(Qt6 6.5 REQUIRED COMPONENTS Core Quick Widgets Svg OpenGLWidgets)
 
 qt_standard_project_setup(REQUIRES 6.5)
 
@@ -44,6 +44,7 @@ set_target_properties(${PROJECT_NAME} PROPERTIES
 
 target_link_libraries(${PROJECT_NAME} PRIVATE
     Qt6::Quick
+    Qt6::OpenGLWidgets
     Qt6::Widgets
     Qt6::Svg
 #    fmt::fmt
@@ -65,7 +66,6 @@ target_include_directories(${PROJECT_NAME} PUBLIC
     ${Eigen_DIR}
     "C:/PCL 1.13.1/3rdParty/glfw-3.3.8.bin.WIN64/include"
     "${CMAKE_CURRENT_SOURCE_DIR}/../glad/include"
-    "C:/0xlitf/LearningCpp/QtOpenGL/glad/include"
 )
 
 get_target_property(target_RUNTIME_location ${PROJECT_NAME} RUNTIME_OUTPUT_DIRECTORY)
