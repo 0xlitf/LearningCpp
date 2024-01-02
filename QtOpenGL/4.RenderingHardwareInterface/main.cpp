@@ -3,7 +3,7 @@
 
 #include <QGuiApplication>
 #include <QCommandLineParser>
-#include "${PROJECT_NAME}.h"
+#include "rhiwindow.h"
 
 int main(int argc, char **argv)
 {
@@ -97,14 +97,15 @@ int main(int argc, char **argv)
 
     int ret = app.exec();
 
-    // ${PROJECT_NAME}::event() will not get invoked when the
+    // RhiWindow::event() will not get invoked when the
     // PlatformSurfaceAboutToBeDestroyed event is sent during the QWindow
     // destruction. That happens only when exiting via app::quit() instead of
     // the more common QWindow::close(). Take care of it: if the QPlatformWindow
     // is still around (there was no close() yet), get rid of the swapchain
     // while it's not too late.
-    if (window.handle())
+    if (window.handle()) {
         window.releaseSwapChain();
+    }
 
     return ret;
 }

@@ -1,14 +1,14 @@
 // Copyright (C) 2020 The Qt Company Ltd.
 // SPDX-License-Identifier: LicenseRef-Qt-Commercial OR BSD-3-Clause
 
-#include "${PROJECT_NAME}.h"
+#include "RhiWindow.h"
 #include <QPlatformSurfaceEvent>
 #include <QPainter>
 #include <QFile>
 #include <rhi/qshader.h>
 
-//! [${PROJECT_NAME}-ctor]
-${PROJECT_NAME}::${PROJECT_NAME}(QRhi::Implementation graphicsApi)
+//! [RhiWindow-ctor]
+RhiWindow::RhiWindow(QRhi::Implementation graphicsApi)
     : m_graphicsApi(graphicsApi)
 {
     switch (graphicsApi) {
@@ -29,9 +29,9 @@ ${PROJECT_NAME}::${PROJECT_NAME}(QRhi::Implementation graphicsApi)
         break; // RasterSurface
     }
 }
-//! [${PROJECT_NAME}-ctor]
+//! [RhiWindow-ctor]
 
-QString ${PROJECT_NAME}::graphicsApiName() const
+QString RhiWindow::graphicsApiName() const
 {
     switch (m_graphicsApi) {
     case QRhi::Null:
@@ -51,7 +51,7 @@ QString ${PROJECT_NAME}::graphicsApiName() const
 }
 
 //! [expose]
-void ${PROJECT_NAME}::exposeEvent(QExposeEvent *)
+void RhiWindow::exposeEvent(QExposeEvent *)
 {
     // initialize and start rendering when the window becomes usable for graphics purposes
     if (isExposed() && !m_initialized) {
@@ -82,7 +82,7 @@ void ${PROJECT_NAME}::exposeEvent(QExposeEvent *)
 //! [expose]
 
 //! [event]
-bool ${PROJECT_NAME}::event(QEvent *e)
+bool RhiWindow::event(QEvent *e)
 {
     switch (e->type()) {
     case QEvent::UpdateRequest:
@@ -104,7 +104,7 @@ bool ${PROJECT_NAME}::event(QEvent *e)
 //! [event]
 
 //! [rhi-init]
-void ${PROJECT_NAME}::init()
+void RhiWindow::init()
 {
     if (m_graphicsApi == QRhi::Null) {
         QRhiNullInitParams params;
@@ -173,7 +173,7 @@ void ${PROJECT_NAME}::init()
 }
 
 //! [swapchain-resize]
-void ${PROJECT_NAME}::resizeSwapChain()
+void RhiWindow::resizeSwapChain()
 {
     m_hasSwapChain = m_sc->createOrResize(); // also handles m_ds
 
@@ -184,7 +184,7 @@ void ${PROJECT_NAME}::resizeSwapChain()
 }
 //! [swapchain-resize]
 
-void ${PROJECT_NAME}::releaseSwapChain()
+void RhiWindow::releaseSwapChain()
 {
     if (m_hasSwapChain) {
         m_hasSwapChain = false;
@@ -193,7 +193,7 @@ void ${PROJECT_NAME}::releaseSwapChain()
 }
 
 //! [render-precheck]
-void ${PROJECT_NAME}::render()
+void RhiWindow::render()
 {
     if (!m_hasSwapChain || m_notExposed)
         return;
@@ -263,7 +263,7 @@ static QShader getShader(const QString &name)
 //! [getshader]
 
 HelloWindow::HelloWindow(QRhi::Implementation graphicsApi)
-    : ${PROJECT_NAME}(graphicsApi)
+    : RhiWindow(graphicsApi)
 {
 }
 

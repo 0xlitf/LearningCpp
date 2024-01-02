@@ -8,10 +8,10 @@
 #include <QOffscreenSurface>
 #include <rhi/qrhi.h>
 
-class ${PROJECT_NAME} : public QWindow
+class RhiWindow : public QWindow
 {
 public:
-    ${PROJECT_NAME}(QRhi::Implementation graphicsApi);
+    RhiWindow(QRhi::Implementation graphicsApi);
     QString graphicsApiName() const;
     void releaseSwapChain();
 
@@ -48,7 +48,7 @@ private:
     bool m_newlyExposed = false;
 };
 
-class HelloWindow : public ${PROJECT_NAME}
+class HelloWindow : public RhiWindow
 {
 public:
     HelloWindow(QRhi::Implementation graphicsApi);

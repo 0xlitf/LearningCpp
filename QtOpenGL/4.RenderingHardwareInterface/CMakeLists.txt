@@ -19,13 +19,16 @@ set(CMAKE_AUTORCC ON)
 set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
+file(GLOB ${PROJECT_NAME_UPPER}_HEADERS "${CMAKE_CURRENT_SOURCE_DIR}/*.h")
+file(GLOB ${PROJECT_NAME_UPPER}_SOURCES "${CMAKE_CURRENT_SOURCE_DIR}/*.cpp")
+
 find_package(Qt6 REQUIRED COMPONENTS Core Gui)
 
 qt_standard_project_setup()
 
 qt_add_executable(${PROJECT_NAME}
-    main.cpp
-    rhiwindow.cpp rhiwindow.h
+    ${${PROJECT_NAME_UPPER}_SOURCES}
+    ${${PROJECT_NAME_UPPER}_HEADERS}
 )
 
 set_target_properties(${PROJECT_NAME} PROPERTIES
