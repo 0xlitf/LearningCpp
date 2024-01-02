@@ -43,7 +43,6 @@ public:
     }
 
     void render() override {
-        qDebug() << "TriangleWindow::render";
         const qreal retinaScale = devicePixelRatio();
         glViewport(0, 0, width() * retinaScale, height() * retinaScale);
 

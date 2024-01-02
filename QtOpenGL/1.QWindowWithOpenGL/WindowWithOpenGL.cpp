@@ -24,7 +24,6 @@ void WindowWithOpenGL::initialize() {
 }
 
 void WindowWithOpenGL::render() {
-    qDebug() << "WindowWithOpenGL::render";
     if (!m_device)
         m_device = new QOpenGLPaintDevice;
 

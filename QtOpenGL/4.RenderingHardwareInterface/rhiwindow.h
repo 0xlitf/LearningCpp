@@ -1,15 +1,10 @@
-// Copyright (C) 2020 The Qt Company Ltd.
-// SPDX-License-Identifier: LicenseRef-Qt-Commercial OR BSD-3-Clause
+#pragma once
 
-#ifndef WINDOW_H
-#define WINDOW_H
-
-#include <QWindow>
 #include <QOffscreenSurface>
+#include <QWindow>
 #include <rhi/qrhi.h>
 
-class RhiWindow : public QWindow
-{
+class RhiWindow : public QWindow {
 public:
     RhiWindow(QRhi::Implementation graphicsApi);
     QString graphicsApiName() const;
@@ -26,11 +21,11 @@ protected:
     std::unique_ptr<QOffscreenSurface> m_fallbackSurface;
 #endif
     std::unique_ptr<QRhi> m_rhi;
-//! [swapchain-data]
-    std::unique_ptr<QRhiSwapChain> m_sc;
-    std::unique_ptr<QRhiRenderBuffer> m_ds;
-    std::unique_ptr<QRhiRenderPassDescriptor> m_rp;
-//! [swapchain-data]
+    //! [swapchain-data]
+    std::unique_ptr<QRhiSwapChain> m_swapChain;
+    std::unique_ptr<QRhiRenderBuffer> m_depthStencil;
+    std::unique_ptr<QRhiRenderPassDescriptor> m_renderPass;
+    //! [swapchain-data]
     bool m_hasSwapChain = false;
     QMatrix4x4 m_viewProjection;
 
@@ -39,8 +34,8 @@ private:
     void resizeSwapChain();
     void render();
 
-    void exposeEvent(QExposeEvent *) override;
-    bool event(QEvent *) override;
+    void exposeEvent(QExposeEvent*) override;
+    bool event(QEvent*) override;
 
     QRhi::Implementation m_graphicsApi;
     bool m_initialized = false;
@@ -48,8 +43,7 @@ private:
     bool m_newlyExposed = false;
 };
 
-class HelloWindow : public RhiWindow
-{
+class HelloWindow : public RhiWindow {
 public:
     HelloWindow(QRhi::Implementation graphicsApi);
 
@@ -57,7 +51,7 @@ public:
     void customRender() override;
 
 private:
-    void ensureFullscreenTexture(const QSize &pixelSize, QRhiResourceUpdateBatch *u);
+    void ensureFullscreenTexture(const QSize& pixelSize, QRhiResourceUpdateBatch* u);
 
     std::unique_ptr<QRhiBuffer> m_vbuf;
     std::unique_ptr<QRhiBuffer> m_ubuf;
@@ -68,11 +62,10 @@ private:
     std::unique_ptr<QRhiShaderResourceBindings> m_fullscreenQuadSrb;
     std::unique_ptr<QRhiGraphicsPipeline> m_fullscreenQuadPipeline;
 
-    QRhiResourceUpdateBatch *m_initialUpdates = nullptr;
+    QRhiResourceUpdateBatch* m_initialUpdates = nullptr;
 
     float m_rotation = 0;
     float m_opacity = 1;
     int m_opacityDir = -1;
 };
 
-#endif

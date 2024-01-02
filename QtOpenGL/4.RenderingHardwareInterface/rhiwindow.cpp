@@ -60,7 +60,7 @@ void RhiWindow::exposeEvent(QExposeEvent *)
         m_initialized = true;
     }
 
-    const QSize surfaceSize = m_hasSwapChain ? m_sc->surfacePixelSize() : QSize();
+    const QSize surfaceSize = m_hasSwapChain ? m_swapChain->surfacePixelSize() : QSize();
 
     // stop pushing frames when not exposed (or size is 0)
     if ((!isExposed() || (m_hasSwapChain && surfaceSize.isEmpty())) && m_initialized && !m_notExposed)
@@ -158,15 +158,15 @@ void RhiWindow::init()
 //! [rhi-init]
 
 //! [swapchain-init]
-    m_sc.reset(m_rhi->newSwapChain());
-    m_ds.reset(m_rhi->newRenderBuffer(QRhiRenderBuffer::DepthStencil,
+    m_swapChain.reset(m_rhi->newSwapChain());
+    m_depthStencil.reset(m_rhi->newRenderBuffer(QRhiRenderBuffer::DepthStencil,
                                       QSize(), // no need to set the size here, due to UsedWithSwapChainOnly
                                       1,
                                       QRhiRenderBuffer::UsedWithSwapChainOnly));
-    m_sc->setWindow(this);
-    m_sc->setDepthStencil(m_ds.get());
-    m_rp.reset(m_sc->newCompatibleRenderPassDescriptor());
-    m_sc->setRenderPassDescriptor(m_rp.get());
+    m_swapChain->setWindow(this);
+    m_swapChain->setDepthStencil(m_depthStencil.get());
+    m_renderPass.reset(m_swapChain->newCompatibleRenderPassDescriptor());
+    m_swapChain->setRenderPassDescriptor(m_renderPass.get());
 //! [swapchain-init]
 
     customInit();
@@ -175,9 +175,9 @@ void RhiWindow::init()
 //! [swapchain-resize]
 void RhiWindow::resizeSwapChain()
 {
-    m_hasSwapChain = m_sc->createOrResize(); // also handles m_ds
+    m_hasSwapChain = m_swapChain->createOrResize(); // also handles m_ds
 
-    const QSize outputSize = m_sc->currentPixelSize();
+    const QSize outputSize = m_swapChain->currentPixelSize();
     m_viewProjection = m_rhi->clipSpaceCorrMatrix();
     m_viewProjection.perspective(45.0f, outputSize.width() / (float) outputSize.height(), 0.01f, 1000.0f);
     m_viewProjection.translate(0, 0, -4);
@@ -188,7 +188,7 @@ void RhiWindow::releaseSwapChain()
 {
     if (m_hasSwapChain) {
         m_hasSwapChain = false;
-        m_sc->destroy();
+        m_swapChain->destroy();
     }
 }
 
@@ -209,7 +209,7 @@ void RhiWindow::render()
     // never QWindow::size(). (the two may or may not be the same under the hood,
     // depending on the backend and platform)
     //
-    if (m_sc->currentPixelSize() != m_sc->surfacePixelSize() || m_newlyExposed) {
+    if (m_swapChain->currentPixelSize() != m_swapChain->surfacePixelSize() || m_newlyExposed) {
         resizeSwapChain();
         if (!m_hasSwapChain)
             return;
@@ -218,12 +218,12 @@ void RhiWindow::render()
 //! [render-resize]
 
 //! [beginframe]
-    QRhi::FrameOpResult result = m_rhi->beginFrame(m_sc.get());
+    QRhi::FrameOpResult result = m_rhi->beginFrame(m_swapChain.get());
     if (result == QRhi::FrameOpSwapChainOutOfDate) {
         resizeSwapChain();
         if (!m_hasSwapChain)
             return;
-        result = m_rhi->beginFrame(m_sc.get());
+        result = m_rhi->beginFrame(m_swapChain.get());
     }
     if (result != QRhi::FrameOpSuccess) {
         qWarning("beginFrame failed with %d, will retry", result);
@@ -235,7 +235,7 @@ void RhiWindow::render()
 //! [beginframe]
 
 //! [request-update]
-    m_rhi->endFrame(m_sc.get());
+    m_rhi->endFrame(m_swapChain.get());
 
     // Always request the next frame via requestUpdate(). On some platforms this is backed
     // by a platform-specific solution, e.g. CVDisplayLink on macOS, which is potentially
@@ -318,7 +318,7 @@ void HelloWindow::customInit()
     m_ubuf->create();
 //! [render-init-1]
 
-    ensureFullscreenTexture(m_sc->surfacePixelSize(), m_initialUpdates);
+    ensureFullscreenTexture(m_swapChain->surfacePixelSize(), m_initialUpdates);
 
     m_sampler.reset(m_rhi->newSampler(QRhiSampler::Linear, QRhiSampler::Linear, QRhiSampler::None,
                                       QRhiSampler::ClampToEdge, QRhiSampler::ClampToEdge));
@@ -356,7 +356,7 @@ void HelloWindow::customInit()
     });
     m_colorPipeline->setVertexInputLayout(inputLayout);
     m_colorPipeline->setShaderResourceBindings(m_colorTriSrb.get());
-    m_colorPipeline->setRenderPassDescriptor(m_rp.get());
+    m_colorPipeline->setRenderPassDescriptor(m_renderPass.get());
     m_colorPipeline->create();
 //! [render-init-2]
 
@@ -374,7 +374,7 @@ void HelloWindow::customInit()
     });
     m_fullscreenQuadPipeline->setVertexInputLayout({});
     m_fullscreenQuadPipeline->setShaderResourceBindings(m_fullscreenQuadSrb.get());
-    m_fullscreenQuadPipeline->setRenderPassDescriptor(m_rp.get());
+    m_fullscreenQuadPipeline->setRenderPassDescriptor(m_renderPass.get());
     m_fullscreenQuadPipeline->create();
 }
 
@@ -407,15 +407,15 @@ void HelloWindow::customRender()
 //! [render-opacity]
 
 //! [render-cb]
-    QRhiCommandBuffer *cb = m_sc->currentFrameCommandBuffer();
-    const QSize outputSizeInPixels = m_sc->currentPixelSize();
+    QRhiCommandBuffer *cb = m_swapChain->currentFrameCommandBuffer();
+    const QSize outputSizeInPixels = m_swapChain->currentPixelSize();
 //! [render-cb]
 
     // (re)create the texture with a size matching the output surface size, when necessary.
     ensureFullscreenTexture(outputSizeInPixels, resourceUpdates);
 
 //! [render-pass]
-    cb->beginPass(m_sc->currentFrameRenderTarget(), Qt::black, { 1.0f, 0 }, resourceUpdates);
+    cb->beginPass(m_swapChain->currentFrameRenderTarget(), Qt::black, { 1.0f, 0 }, resourceUpdates);
 //! [render-pass]
 
     cb->setGraphicsPipeline(m_fullscreenQuadPipeline.get());
