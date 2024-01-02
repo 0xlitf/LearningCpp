@@ -6,13 +6,14 @@
 
 #include <QOpenGLWindow>
 #include <QOpenGLFunctions>
+#include <QOpenGLFunctions_4_5_Core>
 
 QT_FORWARD_DECLARE_CLASS(QPainter)
 QT_FORWARD_DECLARE_CLASS(QOpenGLContext)
 QT_FORWARD_DECLARE_CLASS(QOpenGLPaintDevice)
 
 
-class OpenGLWindow : public QOpenGLWindow
+class OpenGLWindow : public QOpenGLWindow, protected QOpenGLFunctions_4_5_Core
 {
     Q_OBJECT
 public:

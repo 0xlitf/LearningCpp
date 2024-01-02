@@ -72,9 +72,9 @@ void TriangleWindow::initialize() {
 
 void TriangleWindow::render() {
     const qreal retinaScale = devicePixelRatio();
-    // glViewport(0, 0, width() * retinaScale, height() * retinaScale);
+    glViewport(0, 0, width() * retinaScale, height() * retinaScale);
 
-    // glClear(GL_COLOR_BUFFER_BIT);
+    glClear(GL_COLOR_BUFFER_BIT);
 
     m_program->bind();
 
@@ -89,16 +89,16 @@ void TriangleWindow::render() {
 
     static const GLfloat colors[] = {1.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 1.0f};
 
-    // glVertexAttribPointer(m_posAttr, 2, GL_FLOAT, GL_FALSE, 0, vertices);
-    // glVertexAttribPointer(m_colAttr, 3, GL_FLOAT, GL_FALSE, 0, colors);
+    glVertexAttribPointer(m_posAttr, 2, GL_FLOAT, GL_FALSE, 0, vertices);
+    glVertexAttribPointer(m_colAttr, 3, GL_FLOAT, GL_FALSE, 0, colors);
 
-    // glEnableVertexAttribArray(m_posAttr);
-    // glEnableVertexAttribArray(m_colAttr);
+    glEnableVertexAttribArray(m_posAttr);
+    glEnableVertexAttribArray(m_colAttr);
 
-    // glDrawArrays(GL_TRIANGLES, 0, 3);
+    glDrawArrays(GL_TRIANGLES, 0, 3);
 
-    // glDisableVertexAttribArray(m_colAttr);
-    // glDisableVertexAttribArray(m_posAttr);
+    glDisableVertexAttribArray(m_colAttr);
+    glDisableVertexAttribArray(m_posAttr);
 
     m_program->release();
 
