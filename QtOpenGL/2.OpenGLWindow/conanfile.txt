@@ -1,0 +1,9 @@
+[requires]
+sfml/2.6.0
+glfw/3.3.8
+robin-hood-hashing/3.11.5
+
+[generators]
+CMakeDeps
+CMakeToolchain
+

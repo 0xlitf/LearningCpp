@@ -1,7 +1,7 @@
 // Copyright (C) 2016 The Qt Company Ltd.
 // SPDX-License-Identifier: LicenseRef-Qt-Commercial OR BSD-3-Clause
 
-#include "OpenGLWindow.h"
+#include "WindowWithOpenGL.h"
 
 #include <QGuiApplication>
 #include <QMatrix4x4>
@@ -10,9 +10,9 @@
 #include <QtMath>
 
 
-class TriangleWindow : public OpenGLWindow {
+class TriangleWindow : public WindowWithOpenGL {
 public:
-    using OpenGLWindow::OpenGLWindow;
+    using WindowWithOpenGL::WindowWithOpenGL;
 
     void initialize() override;
     void render() override;

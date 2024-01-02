@@ -8,9 +8,9 @@
 #include <QPainter>
 
 OpenGLWindow::OpenGLWindow(QWindow *parent)
-    : QWindow(parent)
+    : QOpenGLWindow(NoPartialUpdate, parent)
 {
-    setSurfaceType(QWindow::OpenGLSurface);
+    setSurfaceType(OpenGLWindow::OpenGLSurface);
 }
 
 OpenGLWindow::~OpenGLWindow()
@@ -32,7 +32,7 @@ void OpenGLWindow::render()
     if (!m_device)
         m_device = new QOpenGLPaintDevice;
 
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
+    // glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 
     m_device->setSize(size() * devicePixelRatio());
     m_device->setDevicePixelRatio(devicePixelRatio());
@@ -87,7 +87,7 @@ void OpenGLWindow::renderNow()
     m_context->makeCurrent(this);
 
     if (needsInitialize) {
-        initializeOpenGLFunctions();
+        // initializeOpenGLFunctions();
         initialize();
     }
 

@@ -12,12 +12,12 @@ QT_FORWARD_DECLARE_CLASS(QOpenGLContext)
 QT_FORWARD_DECLARE_CLASS(QOpenGLPaintDevice)
 
 
-class OpenGLWindow : public QWindow, protected QOpenGLFunctions
+class WindowWithOpenGL : public QWindow, protected QOpenGLFunctions
 {
     Q_OBJECT
 public:
-    explicit OpenGLWindow(QWindow *parent = nullptr);
-    ~OpenGLWindow();
+    explicit WindowWithOpenGL(QWindow *parent = nullptr);
+    ~WindowWithOpenGL();
 
     virtual void render(QPainter *painter);
     virtual void render();
