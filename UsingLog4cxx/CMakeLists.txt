@@ -17,30 +17,21 @@ set(CMAKE_AUTORCC ON)
 set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-add_subdirectory("C:/PCL1.13.1/3rdParty" 3rdParty.out)
-
 find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Core)
 find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Core)
+find_package(log4cxx REQUIRED)
 
-find_package(Boost 1.82 REQUIRED)
-find_package(SOCI REQUIRED)
-
+file(GLOB ${PROJECT_NAME_UPPER}_SRC "${CMAKE_CURRENT_SOURCE_DIR}/*")
 add_executable(${PROJECT_NAME}
-    main.cpp
+   ${${PROJECT_NAME_UPPER}_SRC}
+   log4cxx::log4cxx
 )
 
-target_link_libraries(${PROJECT_NAME}
-    Qt${QT_VERSION_MAJOR}::Core
-    ${sqlite3_DIR}/lib/sqlite3.lib
-    SOCI::soci_core
-    SOCI::soci_sqlite3
-    ${Boost_LIBRARIES}
+target_include_directories(${PROJECT_NAME} PUBLIC
+    ${CMAKE_CURRENT_SOURCE_DIR}/
 )
 
-target_include_directories( ${PROJECT_NAME} PUBLIC
-    ${sqlite3_DIR}/include
-    ${Boost_INCLUDE_DIRS}
-)
+target_link_libraries(${PROJECT_NAME} Qt${QT_VERSION_MAJOR}::Core)
 
 include(GNUInstallDirs)
 install(TARGETS ${PROJECT_NAME}

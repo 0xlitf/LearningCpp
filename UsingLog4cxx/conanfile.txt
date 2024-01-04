@@ -1,6 +1,5 @@
 [requires]
-tinyxml2/9.0.0
-pugixml/1.14
+log4cxx/1.1.0
 
 [generators]
 CMakeDeps

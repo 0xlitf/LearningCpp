@@ -17,7 +17,7 @@ set(CMAKE_AUTORCC ON)
 set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-set(Poco_DIR "C:/PCL 1.13.1/3rdParty/poco-1.12.4-release-lib")
+set(Poco_DIR "C:/PCL1.13.1/3rdParty/poco-1.12.4-release-lib")
 list(APPEND CMAKE_PREFIX_PATH ${Poco_DIR})
 
 find_package(Qt6 6.5 REQUIRED COMPONENTS Core Quick Widgets Xml)
