@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.27.5)
+cmake_minimum_required(VERSION 3.27.7)
 
 get_filename_component(current_dir "${CMAKE_CURRENT_SOURCE_DIR}" NAME)
 string(REPLACE " " "" current_dir "${current_dir}")
@@ -21,7 +21,9 @@ find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Core)
 find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Core)
 find_package(spdlog REQUIRED)
 
-file(GLOB ${PROJECT_NAME_UPPER}_SRC "${CMAKE_CURRENT_SOURCE_DIR}/*")
+message("CMAKE_CURRENT_SOURCE_DIR: ${CMAKE_CURRENT_SOURCE_DIR}")
+file(GLOB ${PROJECT_NAME_UPPER}_SRC "${CMAKE_CURRENT_SOURCE_DIR}/*.h" "${CMAKE_CURRENT_SOURCE_DIR}/*.cpp")
+message("src: ${${PROJECT_NAME_UPPER}_SRC}")
 add_executable(${PROJECT_NAME}
    ${${PROJECT_NAME_UPPER}_SRC}
    spdlog::spdlog
