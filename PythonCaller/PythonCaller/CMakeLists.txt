@@ -26,9 +26,28 @@ qt_standard_project_setup(REQUIRES 6.5)
 file(GLOB ${PROJECT_NAME_UPPER}_HEADERS "${CMAKE_CURRENT_SOURCE_DIR}/*.h")
 file(GLOB ${PROJECT_NAME_UPPER}_SOURCES "${CMAKE_CURRENT_SOURCE_DIR}/*.cpp")
 
+set(CUSTOM_LIB_DIR ${CMAKE_BINARY_DIR}/${PROJECT_NAME}_lib)
+set(CUSTOM_BIN_DIR ${CMAKE_BINARY_DIR}/${PROJECT_NAME}_bin)
+if(${CMAKE_GENERATOR} MATCHES "Visual Studio*")
+    set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CUSTOM_LIB_DIR}/${CMAKE_SYSTEM_NAME})
+    set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CUSTOM_LIB_DIR}/${CMAKE_SYSTEM_NAME})
+    set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CUSTOM_BIN_DIR}/${CMAKE_SYSTEM_NAME})
+
+    set(EXACT_OUTPUT_DIRECTORY ${CUSTOM_BIN_DIR}/${CMAKE_SYSTEM_NAME})
+else()
+    set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CUSTOM_LIB_DIR}/${CMAKE_SYSTEM_NAME}/${CMAKE_BUILD_TYPE})
+    set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CUSTOM_LIB_DIR}/${CMAKE_SYSTEM_NAME}/${CMAKE_BUILD_TYPE})
+    set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CUSTOM_BIN_DIR}/${CMAKE_SYSTEM_NAME}/${CMAKE_BUILD_TYPE})
+
+    set(EXACT_OUTPUT_DIRECTORY ${CUSTOM_BIN_DIR}/${CMAKE_SYSTEM_NAME}/${CMAKE_BUILD_TYPE})
+endif()
+
+message(STATUS "***** EXACT_OUTPUT_DIRECTORY: ${EXACT_OUTPUT_DIRECTORY} *****")
+
 qt_add_executable(${PROJECT_NAME}
     ${${PROJECT_NAME_UPPER}_SOURCES}
     ${${PROJECT_NAME_UPPER}_HEADERS}
+    PyFunc.py
 )
 
 set_target_properties(${PROJECT_NAME} PROPERTIES
@@ -72,3 +91,20 @@ get_target_property(target_ARCHIVE_location ${PROJECT_NAME} ARCHIVE_OUTPUT_DIREC
 message("\t${PROJECT_NAME} target_ARCHIVE_location: ${target_ARCHIVE_location}")
 get_target_property(target_LIBRARY_location ${PROJECT_NAME} LIBRARY_OUTPUT_DIRECTORY)
 message("\t${PROJECT_NAME} target_LIBRARY_location: ${target_LIBRARY_location}")
+
+set(pymodule PyFunc.py)
+if (EXISTS ${CMAKE_CURRENT_LIST_DIR}/${pymodule})
+    message(STATUS "***** pymodule: ${pymodule} *****")
+    if(${CMAKE_GENERATOR} MATCHES "Visual Studio*")
+        file(COPY ${CMAKE_CURRENT_LIST_DIR}/${pymodule}
+             DESTINATION ${EXACT_OUTPUT_DIRECTORY}/Debug)
+        file(COPY ${CMAKE_CURRENT_LIST_DIR}/${pymodule}
+             DESTINATION ${EXACT_OUTPUT_DIRECTORY}/Release)
+    else()
+        file(COPY ${CMAKE_CURRENT_LIST_DIR}/${pymodule}
+             DESTINATION ${EXACT_OUTPUT_DIRECTORY}/)
+    endif()
+
+else()
+    message(STATUS "***** pymodule not exist *****")
+endif()
