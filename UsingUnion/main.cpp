@@ -1,7 +1,9 @@
 
 #include <QApplication>
+#include <QTextCodec>
 #include <QTextEdit>
 #include <iostream>
+#include <windows.h>
 
 // 内存操作最主要的点：
 // 1、内存对齐
@@ -54,6 +56,44 @@ int main(int argc, char **argv) {
     } else {
         qDebug() << "Data size does not match UnionTest size";
     }
+
+    QByteArray byteArray = QByteArray::fromHex("EFBFBDEFBFBDC6B7EFBFBDCDBAEFBFBDEFBFBDDEB7EFBFBDEFBFBDEFBFBDEFBFBDEFBFBDDEFBFDDFBFEFBFBDD0BCEFBFBDEFBFBDEFBFBDEFBFBDEFBFBDEFBFBD");
+    qDebug() << "byteArray " << byteArray;
+    qDebug() << "fromUtf8 " << QString::fromUtf8(byteArray);
+    qDebug() << "fromLocal8Bit " << QString::fromLocal8Bit(byteArray);
+
+    QTextCodec* codec = QTextCodec::codecForName("GBK"); // 或 "GB2312"
+
+    // 将原始数据从GBK转换为UTF-8
+    QString decodedString = codec->toUnicode(byteArray);
+    qDebug() << "GBK " << decodedString;
+
+    // 原始文本
+    wchar_t text[] = L"产品型号无法在数据库中检索到！";
+
+    // 计算所需的字节数（不包括结束的null字符）
+    int bytesNeeded = WideCharToMultiByte(CP_ACP, 0, text, -1, NULL, 0, NULL, NULL) - 1;
+
+    // 分配足够的空间
+    char* gbkBytes = new char[bytesNeeded];
+
+    // 执行转换
+    WideCharToMultiByte(CP_ACP, 0, text, -1, gbkBytes, bytesNeeded, NULL, NULL);
+
+    // 输出字节序列
+    qDebug() << "GBK字节序列: ";
+    for (int i = 0; i < bytesNeeded; ++i) {
+        printf("%02X ", (unsigned char) gbkBytes[i]);
+        qDebug() << "gbkBytes" << i << QString("%1").arg((unsigned char) gbkBytes[i], 2, 16, QChar('0'));
+    }
+
+    qDebug() << "gbkBytes" << QString::fromLatin1(gbkBytes);
+    qDebug() << "gbkBytes" << QString::fromLocal8Bit(gbkBytes);
+
+    // 清理
+    delete[] gbkBytes;
+
+    // return 0;
 
     return app.exec();
 }
