@@ -21,7 +21,7 @@ set(Poco_DIR "C:/PCL-1.14.1/3rdParty/poco-1.12.4-release-lib")
 list(APPEND CMAKE_PREFIX_PATH ${Poco_DIR})
 
 find_package(Qt6 6.5 REQUIRED COMPONENTS Core Quick Widgets Xml)
-find_package(Poco REQUIRED Foundation Xml)
+# find_package(Poco REQUIRED Foundation Xml)
 
 qt_standard_project_setup(REQUIRES 6.5)
 
@@ -46,13 +46,13 @@ set_target_properties(${PROJECT_NAME} PROPERTIES
 target_link_libraries(${PROJECT_NAME} PRIVATE
     Qt6::Widgets
     Qt6::Xml
-    Poco::Foundation
-    Poco::XML
+    # Poco::Foundation
+    # Poco::XML
 )
 
 target_include_directories(${PROJECT_NAME} PUBLIC
     ${PROJECT_SOURCE_DIR}/
-    
+
 )
 
 include(GNUInstallDirs)

@@ -26,12 +26,12 @@ add_executable(${PROJECT_NAME}
 
 target_link_libraries(${PROJECT_NAME}
     Qt${QT_VERSION_MAJOR}::Core
-    ${sqlite3_DIR}/lib/sqlite3.lib
+    ${sqlcipher_DIR}/lib/sqlcipher.lib
 
 )
 
 target_include_directories( ${PROJECT_NAME} PUBLIC
-    ${sqlite3_DIR}/include
+    ${sqlcipher_DIR}/include
 )
 
 include(GNUInstallDirs)

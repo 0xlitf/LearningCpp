@@ -7,7 +7,7 @@ string(REPLACE "-" "_" current_dir "${current_dir}")
 #set(CMAKE_DEBUG_POSTFIX "d")
 set(CMAKE_VERBOSE_MAKEFILE ON)
 
-add_subdirectory("C:/PCL-1.14.1/3rdParty" 3rdParty.out)
+add_subdirectory("C:/Work/wucon-windows/3rdparty" 3rdParty.out)
 
 message("CMAKE_BUILD_TYPE \n\t : ${CMAKE_BUILD_TYPE}")
 
@@ -71,5 +71,8 @@ set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 
-add_subDirs()
+# add_subDirs()
+add_subdirectory(UsingSqlite3)
+add_subdirectory(UsingSqlcipher)
+
 print_subDirs()

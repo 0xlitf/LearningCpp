@@ -21,7 +21,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 find_package(Qt6 6.5 REQUIRED COMPONENTS Core Quick Widgets Xml)
 
-find_package(Boost 1.82 REQUIRED)
+find_package(Boost 1.84 REQUIRED)
 
 qt_standard_project_setup(REQUIRES 6.5)
 
