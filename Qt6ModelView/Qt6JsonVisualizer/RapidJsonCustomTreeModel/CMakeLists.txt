@@ -7,7 +7,7 @@ message("CMake start \n\t directory name: ${current_dir}")
 
 set(CMAKE_VERBOSE_MAKEFILE ON)
 
-add_subdirectory("C:/PCL1.13.1/3rdParty" 3rdParty.out)
+add_subdirectory("C:/PCL-1.14.1/3rdParty" 3rdParty.out)
 
 project("${current_dir}" VERSION 0.1 LANGUAGES CXX)
 string(TOUPPER ${PROJECT_NAME} PROJECT_NAME_UPPER)

@@ -17,7 +17,7 @@ set(CMAKE_AUTORCC ON)
 set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-add_subdirectory("C:/PCL1.13.1/3rdParty" 3rdParty.out)
+add_subdirectory("C:/PCL-1.14.1/3rdParty" 3rdParty.out)
 
 find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Core)
 find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Core)

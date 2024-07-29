@@ -8,9 +8,9 @@ string(REPLACE "-" "_" current_dir "${current_dir}")
 message("CMake start \n\t directory name: ${current_dir}")
 
 set(CMAKE_VERBOSE_MAKEFILE ON)
-#set(fmt_DIR "C:/PCL1.13.1/3rdParty/fmt-10.1.1-lib")
+#set(fmt_DIR "C:/PCL-1.14.1/3rdParty/fmt-10.1.1-lib")
 
-add_subdirectory("C:/PCL1.13.1/3rdParty" 3rdParty.out)
+add_subdirectory("C:/PCL-1.14.1/3rdParty" 3rdParty.out)
 
 #set(current_dir "${current_dir}_${CMAKE_BUILD_TYPE}")
 

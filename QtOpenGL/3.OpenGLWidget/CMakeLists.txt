@@ -51,7 +51,7 @@ target_link_libraries(${PROJECT_NAME} PRIVATE
 #    fmt::fmt
     ${OpenCV_LIBS}
     QtWrapper::QtWrapper
-    "C:/PCL1.13.1/3rdParty/glfw-3.3.8.bin.WIN64/lib-vc2022/glfw3.lib"
+    "C:/PCL-1.14.1/3rdParty/glfw-3.3.8.bin.WIN64/lib-vc2022/glfw3.lib"
 )
 
 include(GNUInstallDirs)
@@ -65,7 +65,7 @@ target_include_directories(${PROJECT_NAME} PUBLIC
     ${OpenCV_INCLUDE_DIRS}
     ${QtWrapper_DIR}
     ${Eigen_DIR}
-    "C:/PCL1.13.1/3rdParty/glfw-3.3.8.bin.WIN64/include"
+    "C:/PCL-1.14.1/3rdParty/glfw-3.3.8.bin.WIN64/include"
     "${CMAKE_CURRENT_SOURCE_DIR}/../glad/include"
 )
 

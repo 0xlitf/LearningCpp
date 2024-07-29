@@ -7,7 +7,7 @@ string(REPLACE "-" "_" current_dir "${current_dir}")
 #set(CMAKE_DEBUG_POSTFIX "d")
 set(CMAKE_VERBOSE_MAKEFILE ON)
 
-add_subdirectory("C:/PCL1.13.1/3rdParty" 3rdParty.out)
+add_subdirectory("C:/PCL-1.14.1/3rdParty" 3rdParty.out)
 
 message("CMAKE_BUILD_TYPE \n\t : ${CMAKE_BUILD_TYPE}")
 
